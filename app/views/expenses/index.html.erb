@@ -1,0 +1,24 @@
+<div class="col-md-6 col-md-offset-3">
+  <h3>Your Expenses</h3>
+  <table class="table table-hover table-condensed">
+    <tr>
+      <th>Cost</th>
+      <th>Category</th>
+      <th>Created at</th>
+      <th></th>
+      <th></th>
+    <tr>
+      <% @expenses.each do |expense| %>
+        <tr>
+          <td><%= expense.value %></td>
+          <td><%= expense.category.name %></td>
+          <td><%= expense.date %></td>
+          <td><%= link_to "edit", edit_expense_path(expense.id) %></td>
+          <td><%= link_to "destroy", expense_path(expense.id), method: :delete %></td>
+        </tr>
+      <% end %>
+  </table>
+  <div class="text-center">
+    <%= will_paginate @expenses, :page_links => false %>
+  </div>
+</div>
