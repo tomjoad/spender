@@ -2,7 +2,7 @@ class ExpensesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @expenses = current_user.expenses.paginate(:page => params[:page], :per_page => 2).order('created_at DESC')
+    @expenses = current_user.expenses.paginate(:page => params[:page], :per_page => 50).order('created_at DESC')
   end
 
   def new
