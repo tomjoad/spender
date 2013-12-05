@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="time-form">
+    <%= form_tag({controller: "expenses", action: "index"}, method: "get", class: "form-inline") do %>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <%= label_tag :category, nil, {class: 'sr-only'} %>
+          <%= collection_select :category, :category_id, Category.all, :id, :name, {include_blank: 'all'}, {class: 'form-control'} %>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div class="form-group">
+          <%= label_tag :start_date, nil, {class: 'sr-only'} %>
+          <%= date_field :start_date, nil, {class: 'form-control'} %>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div class="form-group">
+          <%= label_tag :end_date, nil, {class: 'sr-only'} %>
+          <%= date_field :end_date, nil, {class: 'form-control'} %>
+        </div>
+      </div>
+      <%= submit_tag "Go", class: "btn btn-success" %>
+    <% end %>
+  </div>
+</div>

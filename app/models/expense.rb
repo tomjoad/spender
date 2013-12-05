@@ -25,11 +25,17 @@ class Expense < ActiveRecord::Base
     end
 
     def time_filter(start_date, end_date)
+      # ["2013-12-3"] or ""
+      start_date = self.first.created_at if start_date.first.empty?
+      if end_date.first.empty?
+        end_date = self.last.created_at + (60 * 60 * 24)
+      else
+        end_date = DateTime.strptime(end_date.first, "%Y-%m-%d") + 1
+      end
       where("created_at >= :start_date AND created_at <= :end_date",
       start_date: start_date,
       end_date: end_date)
     end
-
   end
 
 end
