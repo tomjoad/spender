@@ -2,7 +2,11 @@ class ExpensesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @expenses = current_user.expenses.paginate(:page => params[:page], :per_page => 50).order('created_at DESC')
+    if params[:start_date] || params[:end_date]
+      @expenses = current_user.expenses.time_filter(params[:start_date], params[:end_date])
+    else
+      @expenses = current_user.expenses.paginated(params[:page])
+    end
   end
 
   def new
@@ -16,6 +20,7 @@ class ExpensesController < ApplicationController
   end
 
   def create
+    params[:expense][:value].gsub!(/[,]/, '.')
     @expense = current_user.expenses.new(params[:expense])
     if @expense.save
       redirect_to expenses_path

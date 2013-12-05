@@ -1,0 +1,13 @@
+<div class="time-form">
+<%= form_tag({controller: "expenses", action: "index"}, method: "get", class: "form-inline") do %>
+  <div class="form-group">
+    <%= label_tag :start_date, nil, {class: 'sr-only'} %>
+    <%= date_field :start_date, nil, {class: 'form-control'} %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :end_date, nil, {class: 'sr-only'} %>
+    <%= date_field :end_date, nil, {class: 'form-control'} %>
+  </div>
+  <%= submit_tag "Go", class: "btn btn-success" %>
+<% end %>
+</div>
