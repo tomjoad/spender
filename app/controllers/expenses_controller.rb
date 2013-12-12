@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
 
   def index
     @expenses = current_user.expenses.category_and_time_filter(params[:search])
-    @analyze = @expenses.analyze
+    @analysis = Analysis.new(@expenses)
   end
 
   def new

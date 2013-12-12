@@ -24,20 +24,7 @@ class Expense < ActiveRecord::Base
       paginate(:page => page, :per_page => PER_PAGE).order('created_at DESC')
     end
 
-    def analyze
-      hash = {}
-      categories(self.all).each do |category_id|
-        total_value = 0
-        self.all.where(category_id: category_id).each do |expense|
-          total_value += expense.value
-        end
-        hash["#{Category.find(category_id).name}"] = total_value.round(1)
-      end
-      hash
-    end
-
     def time_filter(start_date, end_date)
-      # ["2013-12-3"] or ""
       start_date = self.first.created_at if start_date.empty?
       if end_date.empty?
         end_date = self.last.created_at + (60 * 60 * 24)
@@ -50,10 +37,7 @@ class Expense < ActiveRecord::Base
     end
 
     def category_and_time_filter(search)
-      # {:start_date => "", :end_date => "", category_id => "" }
-      # search => {:start_date => "", :end_date => "", :category_id => ""}
       if search
-        # !params[:start_date].empty? || !params[:end_date].empty? || !params[:category_id].empty?
         expenses = self.time_filter(search[:start_date], search[:end_date]).order(created_at: :desc)
         if !search[:category_id].empty?
           expenses.where(category_id: search[:category_id])
@@ -63,18 +47,6 @@ class Expense < ActiveRecord::Base
       else
         self.order(created_at: :desc)
       end
-    end
-
-    private
-
-    def categories(expenses)
-      t = []
-      if !expenses.nil?
-        expenses.each do |expense|
-          t << expense.category.id if !t.include?(expense.category.id)
-        end
-      end
-      t
     end
 
   end

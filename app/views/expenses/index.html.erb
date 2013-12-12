@@ -3,12 +3,14 @@
     <%= render 'filter' %>
   <% end %>
 
-  <% if !@analyze.empty? %>
+  <% if @analysis.has_expenses? %>
     <h3>Total Costs</h3>
-    <% @analyze.each do |k, v| %>
+    <% @analysis.result.each do |k, v| %>
       <%= k %> : <%= v %><br />
     <% end %>
+    <b>Total:</b> <%= @analysis.total_price %>
   <% end %>
+
 
   <h3>Your Expenses</h3>
   <table class="table table-hover table-condensed">
