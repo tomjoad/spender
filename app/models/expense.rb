@@ -28,7 +28,7 @@ class Expense < ActiveRecord::Base
       hash = {}
       categories(self.all).each do |category_id|
         total_value = 0
-        self.all.each do |expense|
+        self.all.where(category_id: category_id).each do |expense|
           total_value += expense.value
         end
         hash["#{Category.find(category_id).name}"] = total_value
