@@ -5,14 +5,14 @@ class Expense < ActiveRecord::Base
   attr_accessible :value, :category_id, :description, :user_id
 
   PER_PAGE = 50
-  DATE_FORMAT = "%d-%m-%Y"
+  DATE_FORMAT = "%Y-%m-%d"
 
   validates :value, presence: true
   validates :category_id, presence: true
   validates :user_id, presence: true
 
   def date
-    self.created_at.strftime("%d-%m-%Y")
+    self.created_at.strftime(DATE_FORMAT)
   end
 
   # Using a class method is the preferred way to accept arguments for scopes.
@@ -24,18 +24,59 @@ class Expense < ActiveRecord::Base
       paginate(:page => page, :per_page => PER_PAGE).order('created_at DESC')
     end
 
+    def analyze
+      hash = {}
+      categories(self.all).each do |category_id|
+        total_value = 0
+        self.all.each do |expense|
+          total_value += expense.value
+        end
+        hash["#{Category.find(category_id).name}"] = total_value
+      end
+      hash
+    end
+
     def time_filter(start_date, end_date)
       # ["2013-12-3"] or ""
-      start_date = self.first.created_at if start_date.first.empty?
-      if end_date.first.empty?
+      start_date = self.first.created_at if start_date.empty?
+      if end_date.empty?
         end_date = self.last.created_at + (60 * 60 * 24)
       else
-        end_date = DateTime.strptime(end_date.first, "%Y-%m-%d") + 1
+        end_date = DateTime.strptime(end_date, DATE_FORMAT) + 1
       end
       where("created_at >= :start_date AND created_at <= :end_date",
       start_date: start_date,
       end_date: end_date)
     end
+
+    def category_and_time_filter(search)
+      # {:start_date => "", :end_date => "", category_id => "" }
+      # search => {:start_date => "", :end_date => "", :category_id => ""}
+      if search
+        # !params[:start_date].empty? || !params[:end_date].empty? || !params[:category_id].empty?
+        expenses = self.time_filter(search[:start_date], search[:end_date]).order(created_at: :desc)
+        if !search[:category_id].empty?
+          expenses.where(category_id: search[:category_id])
+        else
+          expenses
+        end
+      else
+        self.order(created_at: :desc)
+      end
+    end
+
+    private
+
+    def categories(expenses)
+      t = []
+      if !expenses.nil?
+        expenses.each do |expense|
+          t << expense.category.id if !t.include?(expense.category.id)
+        end
+      end
+      t
+    end
+
   end
 
 end

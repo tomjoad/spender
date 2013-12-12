@@ -2,11 +2,8 @@ class ExpensesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    if params[:start_date] || params[:end_date]
-      @expenses = current_user.expenses.time_filter(params[:start_date], params[:end_date])
-    else
-      @expenses = current_user.expenses.paginated(params[:page])
-    end
+    @expenses = current_user.expenses.category_and_time_filter(params[:search])
+    @analyze = @expenses.analyze
   end
 
   def new
