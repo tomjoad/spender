@@ -35,10 +35,11 @@ class Analysis
     @result.each_value do |value|
       sum += value
     end
-    sum
+    sum.round(1)
   end
 
   def has_expenses?
     !@expenses.empty?
   end
+
 end
