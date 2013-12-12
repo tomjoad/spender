@@ -31,7 +31,7 @@ class Expense < ActiveRecord::Base
         self.all.where(category_id: category_id).each do |expense|
           total_value += expense.value
         end
-        hash["#{Category.find(category_id).name}"] = total_value
+        hash["#{Category.find(category_id).name}"] = total_value.round(1)
       end
       hash
     end
