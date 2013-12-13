@@ -21,15 +21,26 @@
       <th></th>
       <th></th>
     <tr>
-      <% @expenses.each do |expense| %>
+      <% @expenses.dates.each do |date| %>
+        <% line_set = LineSet.new(date, @expenses) %>
         <tr>
-          <td><%= expense.date %></td>
-          <td><%= expense.category.name %></td>
-          <td><%= expense.value %></td>
-          <td><%= link_to "edit", edit_expense_path(expense.id) %></td>
-          <td><%= link_to "destroy", expense_path(expense.id), method: :delete %></td>
+          <td><b><%= line_set.date %></b></td>
+          <td></td>
+          <td><b><%= line_set.total_price %></b></td>
+          <td></td>
+          <td></td>
         </tr>
+        <% line_set.expenses.each do |expense| %>
+          <tr>
+            <td></td>
+            <td><%= expense.category.name %></td>
+            <td><%= expense.value %></td>
+            <td><%= link_to "edit", edit_expense_path(expense.id) %></td>
+            <td><%= link_to "destroy", expense_path(expense.id), method: :delete %></td>
+          </tr>
+        <% end %>
       <% end %>
+
   </table>
   <div class="text-center">
     <%#= will_paginate @expenses, :page_links => false %>

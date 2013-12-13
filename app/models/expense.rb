@@ -20,6 +20,14 @@ class Expense < ActiveRecord::Base
 
   class << self
 
+    def dates
+      dates = []
+      self.all.each do |expense|
+        dates << expense.created_at.to_date if !dates.include?(expense.created_at.to_date)
+      end
+      dates
+    end
+
     def paginated(page)
       paginate(:page => page, :per_page => PER_PAGE).order('created_at DESC')
     end
