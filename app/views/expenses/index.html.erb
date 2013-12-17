@@ -21,7 +21,7 @@
       <th></th>
       <th></th>
     <tr>
-      <% @expenses.dates.each do |date| %>
+      <% @expenses.dates.uniq.each do |date| %>
         <% line_set = LineSet.new(date, @expenses) %>
         <tr>
           <td><b><%= line_set.date %></b></td>

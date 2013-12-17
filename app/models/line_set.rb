@@ -8,19 +8,13 @@ class LineSet
   end
 
   def total_price
-    sum = 0
-    @expenses.each do |expense|
-      sum += expense.value
-    end
-    sum.round(1)
+    @expenses.costs.inject(0) { |v, n| v + n }.round(1)
   end
 
   private
 
   def find_expenses(expenses)
-    expenses.where('created_at >= :start_date AND created_at <= :end_date',
-             start_date: @date.to_datetime,
-             end_date: @date.to_datetime.end_of_day)
+    expenses.where(created_at: @date.to_datetime..@date.to_datetime.end_of_day)
   end
 
 end
