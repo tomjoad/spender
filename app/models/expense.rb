@@ -19,7 +19,7 @@ class Expense < ActiveRecord::Base
   end
 
   def _value=(val)
-    self.value = val.gsub!(/[,]/, '.').to_f.round(1)
+    self.value = val.gsub(/[,]/, '.').to_f.round(1)
   end
 
   # Using a class method is the preferred way to accept arguments for scopes.

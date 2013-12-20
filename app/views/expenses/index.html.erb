@@ -4,13 +4,19 @@
   <% end %>
 
   <% if @analysis.has_expenses? %>
-    <h3>Total Costs</h3>
-    <% @analysis.result.each do |k, v| %>
-      <%= k %> : <%= v %><br />
-    <% end %>
-    <b>Total:</b> <%= @analysis.total_price %>
+    <table class="table table-striped">
+      <% @analysis.result.each do |k, v| %>
+        <tr>
+          <td><%= k %></td>
+          <td><%= v %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><b>Total:</b></td>
+        <td><b><%= @analysis.total_price %></b></td>
+      </tr>
+    </table>
   <% end %>
-
 
   <h3>Your Expenses</h3>
   <table class="table table-hover table-condensed">
@@ -31,11 +37,13 @@
         </tr>
         <% line_set.expenses.each do |expense| %>
           <tr>
+          <div class="expense">
             <td></td>
             <td><%= expense.category.name %></td>
             <td><%= expense.value %></td>
             <td><%= link_to "edit", edit_expense_path(expense.id) %></td>
             <td><%= link_to "destroy", expense_path(expense.id), method: :delete %></td>
+          </div>
           </tr>
         <% end %>
       <% end %>
