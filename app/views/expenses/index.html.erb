@@ -21,8 +21,7 @@
       <th></th>
       <th></th>
     <tr>
-      <% @expenses.dates.uniq.each do |date| %>
-        <% line_set = LineSet.new(date, @expenses) %>
+      <% @line_sets.each do |line_set| %>
         <tr>
           <td><b><%= line_set.date %></b></td>
           <td></td>
@@ -43,7 +42,7 @@
 
   </table>
   <div class="text-center">
-    <%#= will_paginate @expenses, :page_links => false %>
+    <%= will_paginate @line_sets, :page_links => false %>
   </div>
   <%#= params %>
 </div>

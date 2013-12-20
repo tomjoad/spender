@@ -1,8 +1,12 @@
 class ExpensesController < ApplicationController
   before_filter :authenticate_user!
 
+  # to use paginate on array require 'will_paginate/array'
+  # in config/initializers
+
   def index
-    @expenses = current_user.expenses.category_and_time_filter(params[:search])
+    @expenses = current_user.expenses.narrowed(params[:search])
+    @line_sets = @expenses.line_sets.paginate(:page => params[:page], :per_page => 30)
     @analysis = Analysis.new(@expenses)
   end
 
@@ -17,7 +21,6 @@ class ExpensesController < ApplicationController
   end
 
   def create
-    params[:expense][:value].gsub!(/[,]/, '.')
     @expense = current_user.expenses.new(params[:expense])
     if @expense.save
       redirect_to expenses_path

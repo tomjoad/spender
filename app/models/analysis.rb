@@ -9,7 +9,7 @@ class Analysis
   end
 
   def total_price
-    @result.values.inject(0) { |accu, n| accu + n }
+    @result.values.inject(0) { |accu, n| accu + n }.round(1)
   end
 
   def has_expenses?
